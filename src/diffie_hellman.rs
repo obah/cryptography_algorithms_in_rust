@@ -1,4 +1,4 @@
-// //calculates the key for 2 parties alice and bob using the diffie-hellman key exchange algorithm
+//calculates the key for 2 parties alice and bob using the diffie-hellman key exchange algorithm
 
 fn calc_power(p_gen: u32, priv_key: u32, p: u32) -> u32 {
     if priv_key == 1 {
@@ -13,10 +13,10 @@ pub fn diffie_hellman() {
     let g = 9u32; //generator of p
     let a = 4u32;
     let b = 3u32;
-    let mut x = 0u32;
-    let mut y = 0u32;
-    let mut ka = 0u32;
-    let mut kb: u32 = 0u32;
+    let mut _x = 0u32;
+    let mut _y = 0u32;
+    let mut _ka = 0u32;
+    let mut _kb: u32 = 0u32;
 
     println!("The value of P and our modulus is {p}");
     println!("The value of G and our generator is {g}");
@@ -24,16 +24,16 @@ pub fn diffie_hellman() {
     println!("Bob's private key is {b}");
 
     //generate public keys
-    x = calc_power(g, a, p);
-    y = calc_power(g, b, p);
+    _x = calc_power(g, a, p);
+    _y = calc_power(g, b, p);
 
-    println!("public key for alice is {x}");
-    println!("public key for bob is {y}");
+    println!("public key for alice is {_x}");
+    println!("public key for bob is {_y}");
 
     //generate secret keys with exchanged public keys
-    ka = calc_power(y, a, p);
-    kb = calc_power(x, b, p);
+    _ka = calc_power(_y, a, p);
+    _kb = calc_power(_x, b, p);
 
-    println!("Alice's secret  key is {ka}");
-    println!("Bob's secret  key is {kb}");
+    println!("Alice's secret  key is {_ka}");
+    println!("Bob's secret  key is {_kb}");
 }
