@@ -1,7 +1,8 @@
 [package]
-name = "rust_diffie_hellman"
+name = "rust_cryptography_algorithms"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 rand = "0.8.5"
+rsa = { version = "0.9.6", features = ["sha2"] }
