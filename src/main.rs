@@ -1,6 +1,7 @@
 mod diffie_hellman;
 mod elgamal;
 mod merkle_tree;
+mod pedersen_commitment;
 mod rsa_encryption_and_signature;
 mod sha256_and_poseidon_hashing;
 
@@ -12,4 +13,5 @@ fn main() {
     sha256_and_poseidon_hashing::sha256_hasher();
     sha256_and_poseidon_hashing::poseidon_hasher();
     merkle_tree::merkle();
+    // pedersen_commitment::pedersen_commitment();
 }
