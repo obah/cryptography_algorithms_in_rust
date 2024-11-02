@@ -27,5 +27,9 @@ pub fn merkle() {
 
     let proof = MerkleProof::<Sha256>::try_from(proof_bytes).unwrap();
 
-    assert!(proof.verify(merkle_root, &index_to_prove, &[leaf_to_prove], leaves.len()));
+    let verified = proof.verify(merkle_root, &index_to_prove, &[leaf_to_prove], leaves.len());
+
+    assert!(verified);
+
+    println!("Merkle proof for leaf 'b' was verified in the merkle root as {verified}");
 }
