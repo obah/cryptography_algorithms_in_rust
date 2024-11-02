@@ -8,3 +8,4 @@ dusk-poseidon = "0.40.0"
 dusk-bls12_381 = "0.13.0"
 rand = "0.8.5"
 rsa = { version = "0.9.6", features = ["sha2"] }
+rs_merkle = "1.4"
