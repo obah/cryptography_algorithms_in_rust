@@ -11,45 +11,40 @@ fn calc_gcd(a: u128, b: u128) -> u128 {
     }
 }
 
-//generate large number
-fn gen_key(q: u128) -> u128 {
+fn gen_random_key(p: u128) -> u128 {
     let mut rng = thread_rng();
 
-    let mut key = rng.gen_range(10_u128.pow(5)..q);
+    let mut key = rng.gen_range(10_u128.pow(5)..p);
 
-    while calc_gcd(q, key) != 1 {
-        key = rng.gen_range(10_u128.pow(5)..q);
+    while calc_gcd(p, key) != 1 {
+        key = rng.gen_range(10_u128.pow(5)..p);
     }
 
     key
 }
 
-//modular exponentiation
-fn calc_power(a: u128, b: u128, c: u128) -> u128 {
+fn mod_exponentiation(mut a: u128, mut b: u128, c: u128) -> u128 {
     let mut x = 1;
-    let mut y = a;
-    let mut z = b;
 
-    while z > 0 {
-        if z % 2 != 0 {
-            x = (x * y) % c;
+    while b > 0 {
+        if b % 2 != 0 {
+            x = (x * a) % c;
         }
 
-        y = (y * y) % c;
+        a = (a * a) % c;
 
-        z = z / 2
+        b = b / 2
     }
 
     x % c
 }
 
-// asymmetric encryption
 fn encrypt(msg: &str, q: u128, h: u128, g: u128) -> (Vec<u128>, u128) {
     let mut msg_chars: Vec<char> = vec![];
 
-    let k = gen_key(q); // Private key for sender
-    let s = calc_power(h, k, q);
-    let p = calc_power(g, k, q);
+    let k = gen_random_key(q); // Private key for sender
+    let g_k = mod_exponentiation(g, k, q);
+    let g_a_k = mod_exponentiation(h, k, q);
 
     for ch in msg.chars() {
         msg_chars.push(ch);
@@ -57,21 +52,21 @@ fn encrypt(msg: &str, q: u128, h: u128, g: u128) -> (Vec<u128>, u128) {
 
     let mut en_msg: Vec<u128> = vec![0; msg_chars.len()];
 
-    println!("g^k used : {p}");
-    println!("g^ak used : {s}");
+    println!("g^k used : {g_k}");
+    println!("g^ak used : {g_a_k}");
 
     for i in 0..msg_chars.len() {
         let char_num: u128 = (msg_chars[i] as u32).into();
-        en_msg[i] = s * char_num;
+        en_msg[i] = g_a_k * char_num;
     }
 
-    return (en_msg, p);
+    return (en_msg, g_k);
 }
 
-fn decrypt(en_msg: Vec<u128>, p: u128, key: u128, q: u128) -> Vec<char> {
+fn decrypt(en_msg: &Vec<u128>, p: u128, key: u128, q: u128) -> Vec<char> {
     let mut dr_msg = vec![];
 
-    let h = calc_power(p, key, q);
+    let h = mod_exponentiation(p, key, q);
 
     for i in 0..en_msg.len() {
         let ch: u8 = (en_msg[i] / h).try_into().unwrap();
@@ -82,26 +77,24 @@ fn decrypt(en_msg: Vec<u128>, p: u128, key: u128, q: u128) -> Vec<char> {
 }
 
 pub fn elgamal() {
-    let mut rng = thread_rng();
+    let mut rng = thread_rng(); //initialise the random generator
 
-    let msg = "encryption";
-    println!("Original message is `{msg}`");
+    let p: u128 = rng.gen_range(10_u128.pow(5)..10_u128.pow(10)); //random number representing our large prime
+    let g: u128 = rng.gen_range(2..p); //random number representing the generator
 
-    let q: u128 = rng.gen_range(10_u128.pow(5)..10_u128.pow(10));
-    let g: u128 = rng.gen_range(2..q);
+    let msg = "super secret";
 
-    let key: u128 = gen_key(q); //private key for receiver
+    let key: u128 = gen_random_key(p); //private key for receiver
     println!("key is {key}");
 
-    let h = calc_power(g, key, q);
+    let g_a = mod_exponentiation(g, key, p);
 
-    println!("g used: {g}");
-    println!("g^a used: {h}");
+    let (en_msg, g_k) = encrypt(msg, p, g_a, g);
+    let dr_msg = decrypt(&en_msg, g_k, key, p);
 
-    let (en_msg, p) = encrypt(msg, q, h, g);
-    let dr_msg = decrypt(en_msg, p, key, q);
+    let dc_msg: String = dr_msg.iter().collect();
 
-    let dmsg: String = dr_msg.iter().collect();
-
-    println!("Decrypted message is `{dmsg}`");
+    println!("Original message is `{msg}`");
+    println!("Encrypted message is `{:?}`", en_msg);
+    println!("Decrypted message is `{dc_msg}`");
 }
