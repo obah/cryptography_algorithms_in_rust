@@ -13,10 +13,6 @@ pub fn diffie_hellman() {
     let g = 9u32; //generator of p
     let a = 4u32;
     let b = 3u32;
-    let mut _x = 0u32;
-    let mut _y = 0u32;
-    let mut _ka = 0u32;
-    let mut _kb: u32 = 0u32;
 
     println!("The value of P and our modulus is {p}");
     println!("The value of G and our generator is {g}");
@@ -24,16 +20,16 @@ pub fn diffie_hellman() {
     println!("Bob's private key is {b}");
 
     //generate public keys
-    _x = calc_power(g, a, p);
-    _y = calc_power(g, b, p);
+    let x = calc_power(g, a, p);
+    let y = calc_power(g, b, p);
 
-    println!("public key for alice is {_x}");
-    println!("public key for bob is {_y}");
+    println!("public key for alice is {x}");
+    println!("public key for bob is {y}");
 
     //generate secret keys with exchanged public keys
-    _ka = calc_power(_y, a, p);
-    _kb = calc_power(_x, b, p);
+    let ka = calc_power(y, a, p);
+    let kb = calc_power(x, b, p);
 
-    println!("Alice's secret  key is {_ka}");
-    println!("Bob's secret  key is {_kb}");
+    println!("Alice's secret  key is {ka}");
+    println!("Bob's secret  key is {kb}");
 }
