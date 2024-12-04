@@ -1,9 +1,6 @@
-mod diffie_hellman;
-mod elgamal;
-mod merkle_tree;
-mod pedersen_commitment;
-mod rsa_encryption_and_signature;
-mod sha256_and_poseidon_hashing;
+mod algorithms;
+
+use algorithms::{diffie_hellman, elgamal, rsa_encryption_and_signature, sha256_and_poseidon_hashing, merkle_tree};
 
 fn main() {
     diffie_hellman::diffie_hellman();
